@@ -8,11 +8,12 @@ export async function startREPL(state: State) {
   rl.on("line", async (text:string) => {
     const words = cleanInput(text)
     if (words.length === 0) {
-      state.readline.prompt()
+      rl.prompt()
       return
     }
 
     const command = words[0]
+    const args = words.slice(1);
 
     if (!commands[command]) {
       console.log("Unknown command. Type 'help' for a list of commands.")
@@ -21,7 +22,7 @@ export async function startREPL(state: State) {
     }
 
     try {
-        await commands[command].callback(state)
+        await commands[command].callback(state, ...args)
     } catch (err) {
       console.log(err)
     }
