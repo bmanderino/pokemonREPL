@@ -1,5 +1,5 @@
 import { Cache } from "./pokecache.js";
-const CACHE_INTERVAL = 3000
+const CACHE_INTERVAL = 5 * 60 * 1000; // 5 minutes
 export class PokeAPI {
   private static readonly baseURL = "https://pokeapi.co/api/v2";
   private cache: Cache;
@@ -19,6 +19,7 @@ export class PokeAPI {
     if (cached) {
       return cached!
     }
+
     try {
       const response = await fetch(url)
       if (!response.ok) {
@@ -40,8 +41,6 @@ export class PokeAPI {
       return cached;
     }
 
-
-    const response = await fetch(url)
     try {
       const response = await fetch(url)
       if (!response.ok) {
@@ -49,6 +48,28 @@ export class PokeAPI {
       }
 
       const res = await response.json() as Location
+      this.cache.add(url, res)
+      return res
+    } catch(err) {
+      throw new Error(`Error fetching location: ${(err as Error).message}`);
+    }
+  }
+
+  async fetchPokemon(pokemonName: string): Promise<Pokemon> {
+    const url = `${PokeAPI.baseURL}/pokemon/${pokemonName}`
+    const cached = this.cache.get<Pokemon>(url);
+
+    if (cached) {
+      return cached;
+    }
+
+    try {
+      const response = await fetch(url)
+      if (!response.ok) {
+        throw new Error(`${response.status} ${response.statusText}`)
+      }
+
+      const res = await response.json() as Pokemon
       this.cache.add(url, res)
       return res
     } catch(err) {
@@ -121,3 +142,104 @@ export type Location = {
     }[];
   }[];
 };
+
+export type Pokemon = {
+  id: number;
+  name: string;
+  base_experience: number;
+  height: number;
+  is_default: boolean;
+  order: number;
+  weight: number;
+  abilities: {
+    is_hidden: boolean;
+    slot: number;
+    ability: {
+      name: string;
+      url: string;
+    }
+  }[];
+  forms: {
+    name: string;
+    url: string;
+  }[];
+  game_indices: {
+    game_index: number;
+    version: {
+      name: string;
+      url: string;
+    }
+  }[];
+  held_items: {
+    item: {
+      name: string;
+      url: string;
+    };
+    version_details: {
+      rarity: number;
+      version: {
+        name: string;
+        url: string;
+      };
+    }[];
+    location_area_encounters: string;
+  }[];
+  moves: {
+    move: {
+      name: string;
+      url: string
+    };
+    version_group_details: any[]
+  }[];
+  species: {
+    name: string;
+    url: string
+  };
+  sprites: {
+    name: string;
+    url: string;
+  };
+  cries: {
+    latest: string;
+    legacy: string;
+  };
+  stats: {
+    base_stat: number;
+    effort: number;
+    stat: {
+      name: string;
+      url: string;
+    }
+  }[];
+  types: {
+    slot: number;
+    type: {
+      name: string;
+      url: string;
+    }
+  }[];
+  past_types: {
+    generation: {
+      name: string;
+      url: string;
+    };
+    types: {
+      slot: number;
+      type: {
+        name: string;
+        url: string;
+      }
+    }[];
+  }[];
+  past_abilities: {
+    generation: {
+      name: string;
+      url: string;
+    };
+    abilites: {
+      ability: null;
+      is_hidden: true;
+      slot: number
+    }[];
+  }[];
+}

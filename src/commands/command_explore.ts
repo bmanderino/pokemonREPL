@@ -7,8 +7,6 @@ export async function commandExplore(state: State, ...args: string[]) {
   const response = await state.pokeAPI.fetchLocation(args[0])
   const results = response.pokemon_encounters
 
-  // state.nextLocationsURL = response.next ?? undefined
-  // state.prevLocationsURL = response.previous ?? undefined
   console.log(`Exploring ${args[0]}...`)
   console.log("Found Pokemon:")
 
