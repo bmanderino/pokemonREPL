@@ -1,14 +1,17 @@
 # Pokedexts
 
-A TypeScript-based command-line Pokedex REPL that interacts with the PokeAPI to browse Pokemon locations.
+A TypeScript-based command-line Pokedex REPL that lets you explore Pokemon locations, catch Pokemon, and build your own Pokedex using the [PokeAPI](https://pokeapi.co/).
 
 ## ✨ Features
 
-- Interactive command-line interface with REPL
-- Browse Pokemon location areas with pagination
-- Fetches data from [PokeAPI](https://pokeapi.co/)
-- Built with TypeScript and modern ESNext modules
-- Caching layer for improved performance
+- 🎮 Interactive command-line interface with REPL
+- 🗺️ Browse Pokemon location areas with pagination
+- 🔍 Explore specific locations to discover Pokemon
+- 🎯 Catch Pokemon with probability-based mechanics
+- 📖 View your personal Pokedex collection
+- 🔎 Inspect detailed Pokemon stats
+- 💾 Smart caching layer for improved performance (5-minute cache)
+- 🚀 Built with TypeScript and modern ESNext modules
 
 ## 📋 Prerequisites
 
@@ -20,24 +23,58 @@ A TypeScript-based command-line Pokedex REPL that interacts with the PokeAPI to 
 # Install dependencies
 npm install
 
-# Build the project
-npm run build
-
-# Run the application
-npm start
-
-# Or build and run in one step
+# Build and run
 npm run dev
 ```
 
 ## 🎮 Available Commands
 
-Once the REPL starts, you can use the following commands:
+Once the REPL starts (you'll see the `Pokedex >` prompt), you can use:
 
-- `help` - Displays available commands
-- `map` - Get the next page of Pokemon locations
-- `mapb` - Get the previous page of locations
-- `exit` - Exit the Pokedex
+| Command | Description |
+|---------|-------------|
+| `help` | Display all available commands |
+| `map` | Get the next page of Pokemon locations |
+| `mapb` | Get the previous page of locations |
+| `explore <location>` | Explore a location to see what Pokemon are there |
+| `catch <pokemon>` | Attempt to catch a Pokemon (difficulty based on base experience) |
+| `pokedex` | View all Pokemon you've caught |
+| `inspect <pokemon>` | View detailed stats for a caught Pokemon |
+| `exit` | Exit the Pokedex |
+
+### Example Session
+
+```
+Pokedex > map
+canalave-city-area
+eterna-city-area
+pastoria-city-area
+...
+
+Pokedex > explore eterna-city-area
+Exploring eterna-city-area...
+Found Pokemon:
+ - beautifly
+ - dustox
+ - ponyta
+
+Pokedex > catch ponyta
+Throwing a Pokeball at ponyta...
+ponyta was caught!
+
+Pokedex > pokedex
+Your Pokedex:
+ - ponyta
+
+Pokedex > inspect ponyta
+Name: ponyta
+Height: 10
+Weight: 300
+Stats:
+  -hp: 50
+  -attack: 85
+  ...
+```
 
 ## ⚙️ Scripts
 
@@ -51,16 +88,21 @@ Once the REPL starts, you can use the following commands:
 ```
 src/
 ├── commands/
-│   ├── command_exit.ts   # Exit command
-│   ├── command_help.ts   # Help command
-│   └── command_map.ts    # Map navigation commands
-├── main.ts               # Application entry point
-├── repl.ts               # REPL implementation and input handling
-├── repl.test.ts          # REPL tests
-├── state.ts              # Application state management
-├── pokeapi.ts            # PokeAPI client with location fetching
-├── pokecache.ts          # Caching layer for API responses
-└── getCommand.ts         # Command registry
+│   ├── command_catch.ts    # Pokemon catching with probability mechanics
+│   ├── command_exit.ts     # Exit command
+│   ├── command_explore.ts  # Location exploration
+│   ├── command_help.ts     # Help command
+│   ├── command_inspect.ts  # Pokemon detail inspection
+│   ├── command_map.ts      # Map navigation (next/previous)
+│   └── command_pokedex.ts  # Pokedex display
+├── main.ts                 # Application entry point
+├── repl.ts                 # REPL implementation and input handling
+├── repl.test.ts            # REPL tests
+├── state.ts                # Application state management
+├── pokeapi.ts              # PokeAPI client with caching
+├── pokecache.ts            # Caching layer for API responses
+├── cache.test.ts           # Cache tests
+└── getCommand.ts           # Command registry
 ```
 
 ## 🛠️ Tech Stack
