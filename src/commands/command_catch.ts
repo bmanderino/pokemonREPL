@@ -2,7 +2,7 @@ import type { State } from "../state"
 
 export async function commandCatch(state: State, ...args: string[]) {
   if (!args) {
-    throw new Error("Missing location name")
+    throw new Error("Missing pokemon name")
   }
   const pokemonName: string = args[0]
   const response = await state.pokeAPI.fetchPokemon(pokemonName)
