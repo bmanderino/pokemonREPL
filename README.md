@@ -1,4 +1,4 @@
-# Pokedexts
+# Pokedex TS-REPL
 
 A TypeScript-based command-line Pokedex REPL that lets you explore Pokemon locations, catch Pokemon, and build your own Pokedex using the [PokeAPI](https://pokeapi.co/).
 
